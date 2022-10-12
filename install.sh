@@ -1,11 +1,11 @@
 #!/bin/bash
 
 set -e
-trap 'echo "[ERROR] Error in line $LINENO when executing: $BASH_COMMAND"' ERR
+trap 'echo "[错误] 在执行第 $LINENO 行命令 $BASH_COMMAND 时出现错误！"' ERR
 renice 10 $$
 
 if [ -d /bup ]; then
-    echo Talk to @PIL. Dieses Skript ist nichts fuer dich!
+    echo "此脚本不适合你，你已经安装了 BUP！"
     exit 1
 fi
 
@@ -34,18 +34,18 @@ while read -r -d '/' CMD PKG
 do
     if ! command -v "$CMD" &>/dev/null
     then
-        #echo "command $CMD not found, will try to install package $PKG"
+        #echo "未找到命令 $CMD ,将尝试安装软件包 $PKG ..."
         packages+=("$PKG")
     fi
 done < <(echo "$command_package")
 
 if [[ -n "${packages[*]}" ]]; then
     if ! command -v "apt-get" &>/dev/null; then
-        echo "Please install the following packages and rerun the install:"
+        echo "请安装以下软件包并重新运行安装程序:"
         echo "${packages[*]}"
         exit 1
     fi
-    echo "Installing required packages: ${packages[*]}"
+    echo "正在安装所需软件包: ${packages[*]}"
     if ! apt-get install -y --no-install-suggests --no-install-recommends "${packages[@]}"; then
         apt-get update || true
         apt-get install -y --no-install-suggests --no-install-recommends "${packages[@]}" || true
@@ -55,7 +55,7 @@ if [[ -n "${packages[*]}" ]]; then
     do
         if ! command -v "$CMD" &>/dev/null
         then
-            echo "command $CMD not found, seems we failed to install package $PKG"
+            echo "未找到命令 $CMD ,似乎安装软件包 $PKG 失败！"
             echo "FATAL: Exiting!"
             exit 1
         fi
@@ -86,7 +86,7 @@ fi
 
 function getGIT() {
     # getGIT $REPO $BRANCH $TARGET (directory)
-    if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]; then echo "getGIT wrong usage, check your script or tell the author!" 1>&2; return 1; fi
+    if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]; then echo "GIT错误用法，检查你的脚本或告诉作者！" 1>&2; return 1; fi
     REPO="$1"; BRANCH="$2"; TARGET="$3"; pushd . >/dev/null
     if cd "$TARGET" &>/dev/null && git fetch --depth 1 origin "$BRANCH" 2>/dev/null && git reset --hard FETCH_HEAD; then popd >/dev/null && return 0; fi
     if ! cd /tmp || ! rm -rf "$TARGET"; then popd > /dev/null; return 1; fi
@@ -107,7 +107,7 @@ fi
 
 if ! cd $ipath/git-db
 then
-    echo "Unable to download files, exiting! (Maybe try again?)"
+    echo "无法下载文件，退出！(或在尝试一次？)"
     exit 1
 fi
 
@@ -125,7 +125,7 @@ then
 else
     if ! getGIT "$repo" "master" "$ipath/git" || ! cd "$ipath/git"
     then
-        echo "Unable to download files, exiting! (Maybe try again?)"
+        echo "无法下载文件，退出！(或在尝试一次？)若曾安装过旧版本，请先卸载或强制删除源文件夹！"
         exit 1
     fi
     TAR_VERSION="$(revision)"
@@ -140,21 +140,15 @@ elif [[ -f /run/dump1090-fa/aircraft.json ]] ; then
     srcdir=/run/dump1090-fa
 elif [[ -f /run/readsb/aircraft.json ]]; then
     srcdir=/run/readsb
-elif [[ -f /run/adsbexchange-feed/aircraft.json ]]; then
-    srcdir=/run/adsbexchange-feed
 elif [[ -f /run/dump1090/aircraft.json ]]; then
     srcdir=/run/dump1090
 elif [[ -f /run/dump1090-mutability/aircraft.json ]]; then
     srcdir=/run/dump1090-mutability
-elif [[ -f /run/skyaware978/aircraft.json ]]; then
-    srcdir=/run/skyaware978
 else
     echo --------------
-    echo FATAL: could not find aircraft.json in any of the usual places!
-    echo "checked these: /run/readsb /run/dump1090-fa /run/dump1090 /run/dump1090-mutability /run/adsbexchange-feed /run/skyaware978"
-    echo --------------
-    echo "You need to have a decoder installed first, readsb is recommended:"
-    echo "https://github.com/wiedehopf/adsb-scripts/wiki/Automatic-installation-for-readsb"
+    echo "[失败]: 在您的设备上无法找到aircraft.json！"
+    echo "您需要先安装解码器，建议使用readsb:"
+    echo "https://docs.mengorg.cn/archives/readsb"
     echo --------------
     exit 1
 fi
@@ -377,10 +371,10 @@ do
         cp tar1090.service /lib/systemd/system/$service.service
         if systemctl enable $service
         then
-            echo "Restarting $service ..."
+            echo "重启服务 $service 中..."
             systemctl restart $service || ! pgrep systemd
         else
-            echo "$service.service is masked, could not start it!"
+            echo "服务 $service.service 被屏蔽,无法启动！"
         fi
     fi
 
@@ -439,13 +433,13 @@ if [[ $lighttpd == yes ]]; then
     #lighttpd -tt -f /etc/lighttpd/lighttpd.conf && echo success || true
     if ! lighttpd -tt -f /etc/lighttpd/lighttpd.conf &>/dev/null; then
         echo ----------------
-        echo "Lighttpd error, tar1090 will probably not work correctly:"
+        echo "Lighttpd错误，tar1090 可能无法正常工作:"
         lighttpd -tt -f /etc/lighttpd/lighttpd.conf
     fi
 
     if grep -qs -e '^compress.cache-dir' /etc/lighttpd/lighttpd.conf; then
         echo -----
-        echo "Disabling compress.cache-dir in /etc/lighttpd/lighttpd.conf due to often causing full disk issues as there is no automatic cleanup mechanism. Add a leading space to the compress.cache-dir line if you don't want tar1090 to mess with it in the future."
+        echo "禁用压缩。在/etc/lighttpd/lighttpd.conf中缓存dir，因为没有自动清理机制，经常会导致磁盘满。为 compress 添加一个前导空格。缓存-dir行，如果你不想tar1090在未来搅乱它。"
         echo -----
         sed -i -e 's$^compress.cache-dir.*$#\0 # disabled by tar1090, often causes full disk due to not having a cleanup mechanism$' /etc/lighttpd/lighttpd.conf
     elif ! grep -qs -e 'disabled by tar1090' /etc/lighttpd/lighttpd.conf; then
@@ -453,7 +447,7 @@ if [[ $lighttpd == yes ]]; then
     fi
     if grep -qs -e '^deflate.cache-dir' /etc/lighttpd/lighttpd.conf; then
         echo -----
-        echo "Disabling deflate.cache-dir in /etc/lighttpd/lighttpd.conf due to often causing full disk issues as there is no automatic cleanup mechanism. Add a leading space to the deflate.cache-dir line if you don't want tar1090 to mess with it in the future."
+        echo "禁用缩小。在/etc/lighttpd/lighttpd.conf中缓存dir，因为没有自动清理机制，经常会导致磁盘满。为 deflate 添加一个前导空格。缓存-dir行，如果你不想tar1090在未来搅乱它。"
         echo -----
         sed -i -e 's$^deflate.cache-dir.*$#\0 # disabled by tar1090, often causes full disk due to not having a cleanup mechanism$' /etc/lighttpd/lighttpd.conf
     elif ! grep -qs -e 'disabled by tar1090' /etc/lighttpd/lighttpd.conf; then
@@ -462,7 +456,7 @@ if [[ $lighttpd == yes ]]; then
 fi
 
 if systemctl show lighttpd 2>/dev/null | grep -qs -F -e 'UnitFileState=enabled' -e 'ActiveState=active'; then
-    echo "Restarting lighttpd ..."
+    echo "重启 lighttpd 中..."
     systemctl restart lighttpd || ! pgrep systemd
 fi
 
@@ -471,7 +465,7 @@ echo --------------
 
 if [[ $nginx == yes ]]; then
     echo
-    echo "To configure nginx for tar1090, please add the following line(s) in the server {} section:"
+    echo "要为 tar1090 配置 nginx，请在service {} 部分添加以下行:"
     echo
     for service in $services; do
         echo "include /usr/local/share/tar1090/nginx-$service.conf;"

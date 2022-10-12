@@ -5,9 +5,9 @@ echo --------------
 if [[ -n $1 ]]; then
 	instance="tar1090-$1"
     rm -rf "/usr/local/share/tar1090/html-$1"
-    echo "Removing tar1090, instance name $instance!"
+    echo "移除 tar1090 中,实例名称为 $instance!"
 else
-    echo "Removing tar1090, all instances!"
+    echo "移除 tar1090 所有实例!"
 	rm -rf /usr/local/share/tar1090
     rm -f /etc/lighttpd/conf-available/*tar1090*
     rm -f /etc/lighttpd/conf-enabled/*tar1090*
@@ -18,7 +18,7 @@ systemctl stop "$instance"
 systemctl disable "$instance"
 
 #rm -f /etc/default/$instance
-echo "Configuration is left to be removed manually, you can use this command:"
+echo "配置要手动删除，您可以使用此命令:"
 echo "sudo rm /etc/default/$instance"
 rm -f "/lib/systemd/system/$instance.service"
 
@@ -34,4 +34,4 @@ systemctl restart lighttpd
 
 
 echo --------------
-echo "tar1090 is now gone! Shoo shoo!"
+echo "tar1090已经卸载!再见！"

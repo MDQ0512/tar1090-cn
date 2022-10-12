@@ -31,7 +31,7 @@ Dump1090-mutability应该也可以安装，但飞机细节将受到限制。
 ## 安装
 
 ```
-sudo bash -c "$(wget -O - https://gitee.com/smallmeng/adsb-scripts/raw/master/readsb-install.sh)"
+sudo bash -c "$(wget -nv -O - https://gitee.com/smallmeng/tar1090-cn/raw/master/install.sh)"
 ```
 
 ## 查看已添加的web界面
@@ -49,7 +49,7 @@ sudo bash -c "$(wget -O - https://gitee.com/smallmeng/adsb-scripts/raw/master/re
 ## 更新(与安装命令相同)
 
 ```
-sudo bash -c "$(wget -O - https://gitee.com/smallmeng/adsb-scripts/raw/master/readsb-install.sh)"
+sudo bash -c "$(wget -nv -O - https://gitee.com/smallmeng/tar1090-cn/raw/master/install.sh)"
 ```
 
 配置会被保留。
@@ -97,7 +97,7 @@ sudo rm /usr/local/share/tar1090/html/config.js
 ### 安装/更新以使用另一个文件夹，例如/run/combine1090
 
 ```
-wget -nv -O /tmp/install.sh https://gitee.com/smallmeng/adsb-scripts/raw/master/readsb-install.sh
+wget -nv -O /tmp/install.sh https://gitee.com/smallmeng/tar1090-cn/raw/master/install.sh
 sudo bash /tmp/install.sh /run/combine1090
 ```
 

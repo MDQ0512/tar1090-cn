@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
   <head>
     <meta name="description" content="tar1090 - ADS-B plane tracking interface">
@@ -63,25 +63,73 @@
         </div>
       </div>
 
-
       <div id="selected_infoblock" style="display: none">
         <div id="infoblock_close" class="infoblockCloseBox"></div>
         <div id="infoblock-container">
-
-          <div class="highlightedTitle infoBlockSection">
-            <div>
+          <div class="highlightedTitle infoBlockSection"><div>
               <span class="identLarge" title="呼号：通常是空中交通管制呼号或飞机的登记，由飞行员输入应答器" id="selected_callsign">n/a</span>
-            </div>
-            <div id="selected_icao" title="ICAO hex ID：飞机的唯一 ICAO 识别号，以十六进制格式显示在飞机应答器中（可能是错误的，我们仍然会显示错误的十六进制数据）"></div>
-            <div style="display: none" id="creditsSelected"></div>
-          </div>
-            <div class="rSpacer"></div>
-            <div class="rSpacer"></div>
-            <div class="rSpacer"></div>
-            <div class="rSpacer"></div>
-            <div class="rSpacer"></div>
-            <div class="rSpacer"></div>
         </div>
+          <div id="selected_icao" title="ICAO hex ID：飞机的唯一 ICAO 识别号，以十六进制格式显示在飞机应答器中（可能是错误的，我们仍然会显示错误的十六进制数据）"></div>
+            <div style="display: none" id="creditsSelected">
+              <table class="infoSectionTable">
+                <tr>
+                  <td>
+                    <span class=credits-image></span>
+                  </td>
+                  <td>
+                    <span class=credits-text>adsbexchange.com</span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div id=anon_mlat_info class="infoBlockSection hidden">
+            <div>
+              <div class="infoHeading">
+                <span>Non-ICAO hex, info:</span>
+              </div>
+            </div>
+            <div class="rSpacer"></div>
+            <div class="infoHeading">
+              <span><a class="link" target="_blank" href="https://discussions.flightaware.com/t/flightaware-mlat-network-announcement/18874" rel="noreferrer">Anonymized MLAT result</a></span>
+            </div>
+            <div class="rSpacer"></div>
+            <div class="rSpacer"></div>
+            <div class="rSpacer"></div>
+            <div class="rSpacer"></div>
+            <div class="rSpacer"></div>
+            <div class="rSpacer"></div>
+            <div>
+              <div class="infoHeading">
+                <span>No <a class="link" target="_blank" href="https://en.wikipedia.org/wiki/Aviation_transponder_interrogation_modes#ICAO_24-bit_address" rel="noreferrer">ICAO 24 bit address</a></span>
+              </div>
+            </div>
+          </div>
+          <div id=tisb_info class="infoBlockSection hidden">
+            <div class="infoHeading">
+              <span>Non-ICAO hex, info:</span>
+            </div>
+            <div class="infoHeading">
+              <span title="TIS-B link">
+                <a class="link" target="_blank" href="https://www.skybrary.aero/index.php/Traffic_Information_Service_-_Broadcast_(TIS-B)" rel="noreferrer">ATC contact broadcast</a></span>
+            </div>
+            <div class="rSpacer">
+            </div>
+            <div class="infoHeading">
+              This hex ID is dynamic and can't be connected to a type or registration
+            </div>
+            <div class="rSpacer">
+            </div>
+            <div class="infoHeading">
+              Often corresponding MLAT contact for the same aircraft
+            </div>
+            <div class="infoHeading">
+              <span>MLAT requires the contact to have a ModeS transponder and reception by 4 receivers</span>
+            </div>
+            <div class="infoHeading">
+              <span><a class="link" target="_blank" href="https://en.wikipedia.org/wiki/Aviation_transponder_interrogation_modes#ICAO_24-bit_address" rel="noreferrer">What is a hex ID?</a></span>
+            </div>
+          </div>
           <div id=reg_info class="infoBlockSection">
             <table class="infoSectionTable">
               <tr id=pf_info_container class=>
@@ -803,7 +851,7 @@
 
               <tr class="infoblock_heading">
                 <td style="text-align: right" class=link>
-                  <a href="https://www.mengorg.cn" target="_blank">tar1090 汉化 Powered by 小孟要吃肉</a>
+                  <a href="https://docs.mengorg.cn" target="_blank">tar1090 汉化 Powered by 小孟要吃肉</a>
                 </td>
               </tr>
               <tr class="rSpacer">

@@ -1,6 +1,7 @@
 # tar1090
 
 ![Screenshot1](https://cdn.flightadsb.mengorg.cn/photos/tar1090.png)
+![Alt](https://repobeats.axiom.co/api/embed/d5e8476b0519ed6080fd7005964ead7358e4c152.svg "Repobeats analytics image")
 
 tar1090为ADS-B解码器readsb / dump1090-fa提供了改进的web界面
 
